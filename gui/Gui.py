@@ -8,7 +8,7 @@ from utils.upload_sound_file import let_user_select_file
 
 
 class Gui:
-    def __init__(self, model_type="rnn"):
+    def __init__(self, model_type):
         self.root = Tk()
         self.root.title("Muziek genre herkenner")
 
