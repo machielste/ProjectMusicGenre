@@ -2,13 +2,13 @@ from tkinter import *
 
 import winsound
 
-from deep_learning.infer import SimpleInference, RnnInference
+from deep_learning.infer import RnnInference
 from utils.mp3_wav_util import mp3_to_wav, get_wav_length
 from utils.upload_sound_file import let_user_select_file
 
 
 class Gui:
-    def __init__(self, model_type):
+    def __init__(self):
         self.root = Tk()
         self.root.title("Muziek genre herkenner")
 
@@ -38,12 +38,7 @@ class Gui:
         self.current_rnn_prediction = 0
 
         # init for inference class
-        if model_type == "simple":
-            self.inference = SimpleInference()
-        elif model_type == "rnn":
-            self.inference = RnnInference()
-        elif model_type == "rnn_fma":
-            self.inference = RnnInference(fma=True)
+        self.inference = RnnInference()
 
     def run(self):
         self.root.mainloop()

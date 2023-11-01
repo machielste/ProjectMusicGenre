@@ -34,9 +34,14 @@ def generate_taining_data():
             encoded_label = encoder.transform([g])[0]
             y_list = [encoded_label] * 10
 
+            # our audio clips are 30 seconds long, generate an input output pair for every 3 seconds
             for i in range(10):
                 sub_data_list = []
-                y, sr = librosa.load(songname, mono=True, duration=3, offset=i * 3)
+                logger.info(f"now processing {songname}")
+                try:
+                    y, sr = librosa.load(songname, mono=True, duration=3, offset=i * 3)
+                except:
+                    continue
                 sub_data_list.append(np.mean(librosa.feature.chroma_stft(y=y, sr=sr)))
                 sub_data_list.append(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)))
                 sub_data_list.append(np.mean(librosa.feature.spectral_bandwidth(y=y, sr=sr)))
@@ -98,7 +103,7 @@ def main(return_sequences=True):
 
     results = model.evaluate(X_test, y_test)
 
-    model.save('models/rnn_model.h5')
+    model.save('models/rnn_model.keras')
 
 
 if __name__ == "__main__":
