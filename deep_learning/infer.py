@@ -1,5 +1,3 @@
-import pickle
-
 import librosa
 import numpy as np
 import tensorflow as tf
@@ -30,31 +28,11 @@ class RnnInference:
             sub_data_list.append(np.mean(librosa.feature.spectral_rolloff(y=y, sr=sr)))
             sub_data_list.append(np.mean(librosa.feature.zero_crossing_rate(y)))
             sub_data_list.append(np.mean(librosa.feature.rms(y=y)))
-            mfcc = librosa.feature.mfcc(y=y, sr=sr)
-            for e in mfcc:
-                sub_data_list.append(np.mean(e))
 
             data_list.append(np.array(sub_data_list))
 
         data_list = np.array(data_list)
-
-        with open('deep_learning/saved_scalers.data', 'rb') as filehandle:
-            scaler_params = pickle.load(filehandle)
-
         data_list = np.expand_dims(data_list, axis=0)
-
-        for i in range(26):
-            scaler = scaler_params[i]
-            slice = data_list[:, :, i]
-
-            rounded_time_series_length = np.shape(slice)[1] - np.shape(slice)[1] % 10
-
-            for g in range(0, rounded_time_series_length, 10):
-                slice[:, g:g + 10] = scaler.transform(slice[:, g:g + 10])
-
-            slice[:, -10:] = scaler.transform(slice[:, -10:])
-
-            data_list[:, :, i] = slice
 
         prediction_list = self.model.predict(data_list)
         prediction_list = np.squeeze(prediction_list)
