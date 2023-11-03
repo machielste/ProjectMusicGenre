@@ -26,8 +26,8 @@ def generate_taining_data():
 
         logger.info(f"Now handling folder: {g}")
 
-        for j, filename in enumerate(os.listdir(f'./MIR/genres/{g}')):
-            songname = f'./MIR/genres/{g}/{filename}'
+        for filename in os.listdir(f'./dataset/{g}'):
+            songname = f'./dataset/{g}/{filename}'
 
             data_list = []
 
