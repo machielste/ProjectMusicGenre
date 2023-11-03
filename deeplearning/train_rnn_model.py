@@ -34,10 +34,12 @@ def generate_taining_data():
             encoded_label = encoder.transform([g])[0]
             y_list = [encoded_label] * 10
 
-            # our audio clips are 30 seconds long, generate an input output pair for every 3 seconds
+            # Our audio clips are 30 seconds long,
+            # generate sequences of 10 inputs and outputs for the RNN input.
+            # This means our input is 10 3-second clips,
+            # and our output will be 10 predictions, or just one if "return_sequences" is disabled in the lstm.
             for i in range(10):
                 sub_data_list = []
-                logger.info(f"now processing {songname}")
 
                 y, sr = librosa.load(songname, mono=True, duration=3, offset=i * 3)
 
@@ -45,7 +47,7 @@ def generate_taining_data():
                 sub_data_list.append(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)))
                 sub_data_list.append(np.mean(librosa.feature.spectral_bandwidth(y=y, sr=sr)))
                 sub_data_list.append(np.mean(librosa.feature.spectral_rolloff(y=y, sr=sr)))
-                sub_data_list.append(np.mean(librosa.feature.zero_crossing_rate(y)))
+                sub_data_list.append(np.mean(librosa.feature.zero_crossing_rate(y=y)))
                 sub_data_list.append(np.mean(librosa.feature.rms(y=y)))
                 # mfcc = librosa.feature.mfcc(y=y, sr=sr)
                 # for e in mfcc:
