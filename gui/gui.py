@@ -2,7 +2,7 @@ from tkinter import *
 
 import winsound
 
-from deep_learning.infer import RnnInference
+from deeplearning.infer import RnnInference
 from utils.mp3_wav_util import mp3_to_wav, get_wav_length
 from utils.upload_sound_file import let_user_select_file
 
