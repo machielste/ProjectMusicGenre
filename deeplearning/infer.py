@@ -10,7 +10,7 @@ class RnnInference:
     def __init__(self):
 
         self.model = tf.keras.models.load_model(
-            "deep_learning/models/rnn_model.keras")
+            "deeplearning/saved_models/rnn_model.keras")
 
     def infer(self, path_to_file):
         data_list = []

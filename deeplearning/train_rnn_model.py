@@ -49,10 +49,10 @@ def generate_taining_data():
                 sub_data_list.append(np.mean(librosa.feature.spectral_rolloff(y=y, sr=sr)))
                 sub_data_list.append(np.mean(librosa.feature.zero_crossing_rate(y=y)))
                 sub_data_list.append(np.mean(librosa.feature.rms(y=y)))
-                # mfcc = librosa.feature.mfcc(y=y, sr=sr)
-                # for e in mfcc:
-                #     sub_data_list.append(np.mean(e))
-                #
+                mfcc = librosa.feature.mfcc(y=y, sr=sr)
+                for e in mfcc:
+                    sub_data_list.append(np.mean(e))
+
                 data_list.append(sub_data_list)
 
             dataset[0].append(data_list)
@@ -61,36 +61,37 @@ def generate_taining_data():
     dataset[0] = np.array(dataset[0])
     dataset[1] = np.array(dataset[1])
 
-    with open('rnn_dataset.data', 'wb') as filehandle:
+    with open('processed_datasets/rnn_dataset.data', 'wb') as filehandle:
         # store the data as binary data stream
         pickle.dump(dataset, filehandle)
 
 
 def main(return_sequences=True):
-    if not os.path.exists("rnn_dataset.data"):
+    if not os.path.exists("processed_datasets/rnn_dataset.data"):
         generate_taining_data()
 
-    with open('rnn_dataset.data', 'rb') as filehandle:
+    with open('processed_datasets/rnn_dataset.data', 'rb') as filehandle:
         dataset = pickle.load(filehandle)
 
     X, Y = dataset[0], dataset[1]
 
     model = get_rnn_model(return_sequences=return_sequences)
+    model.layers[0].adapt(X)
 
-    # als de RNN niet een sequence aan data returned, moeten alle labels behavle de eerste weg
+    # If the LSTM is set to not return a whole sequence, but just 1 output, we need to have just a single label
     if not return_sequences:
         Y = np.delete(Y, [1, 2, 3, 4, 5, 6, 7, 8, 9], axis=1)
 
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2)
 
-    history = model.fit(X_train,
-                        y_train,
-                        epochs=100,
-                        batch_size=64)
+    model.fit(X_train,
+              y_train,
+              epochs=100,
+              batch_size=64)
 
-    results = model.evaluate(X_test, y_test)
+    model.evaluate(X_test, y_test)
 
-    model.save('models/rnn_model.keras')
+    model.save('saved_models/rnn_model.keras')
 
 
 if __name__ == "__main__":
