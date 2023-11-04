@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
 from model import get_rnn_model
+from utils.feature_extraction import extract_features_for_audio_clip
 
 logger = logging.getLogger("logger")
 logging.basicConfig(level=logging.DEBUG)
@@ -39,21 +40,9 @@ def generate_taining_data():
             # This means our input is 10 3-second clips,
             # and our output will be 10 predictions, or just one if "return_sequences" is disabled in the lstm.
             for i in range(10):
-                sub_data_list = []
-
                 y, sr = librosa.load(songname, mono=True, duration=3, offset=i * 3)
 
-                sub_data_list.append(np.mean(librosa.feature.chroma_stft(y=y, sr=sr)))
-                sub_data_list.append(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)))
-                sub_data_list.append(np.mean(librosa.feature.spectral_bandwidth(y=y, sr=sr)))
-                sub_data_list.append(np.mean(librosa.feature.spectral_rolloff(y=y, sr=sr)))
-                sub_data_list.append(np.mean(librosa.feature.zero_crossing_rate(y=y)))
-                sub_data_list.append(np.mean(librosa.feature.rms(y=y)))
-                mfcc = librosa.feature.mfcc(y=y, sr=sr)
-                for e in mfcc:
-                    sub_data_list.append(np.mean(e))
-
-                data_list.append(sub_data_list)
+                data_list.append(extract_features_for_audio_clip(y=y, sr=sr))
 
             dataset[0].append(data_list)
             dataset[1].append(y_list)
@@ -75,7 +64,7 @@ def main(return_sequences=True):
 
     X, Y = dataset[0], dataset[1]
 
-    model = get_rnn_model(return_sequences=return_sequences)
+    model = get_rnn_model(return_sequences=return_sequences, stateful=False)
     model.layers[0].adapt(X)
 
     # If the LSTM is set to not return a whole sequence, but just 1 output, we need to have just a single label
@@ -91,7 +80,7 @@ def main(return_sequences=True):
 
     model.evaluate(X_test, y_test)
 
-    model.save('saved_models/rnn_model.keras')
+    model.save('saved_models/rnn_model.h5')
 
 
 if __name__ == "__main__":
