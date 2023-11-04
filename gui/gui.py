@@ -114,9 +114,7 @@ class Gui:
         new_text = "Currently selected audio file: {}".format(split[len(split) - 1])
         self.label.config(text=new_text)
 
-    def remove_garbage_from_string(self, string):
-        string = string.translate({ord(c): None for c in r"[]\/"})
-        return string
+
 
     def _delete_window(self):
         self.root.destroy()
@@ -136,3 +134,8 @@ class Gui:
         B1 = Button(popup, text="Ok", command=popup.destroy)
         B1.pack()
         popup.mainloop()
+
+    @staticmethod
+    def remove_garbage_from_string(string):
+        string = string.translate({ord(c): None for c in r"[]\/"})
+        return string

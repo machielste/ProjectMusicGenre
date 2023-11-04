@@ -9,9 +9,10 @@ from utils.mp3_wav_util import get_wav_length
 
 class RnnInference:
     def __init__(self):
-
         self.model = tf.keras.models.load_model(
             "deeplearning/saved_models/rnn_model.h5")
+        self.model.stateful = True
+        self.model.reset_states()
 
     def infer(self, path_to_file):
         data_list = []
