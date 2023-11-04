@@ -12,7 +12,7 @@ class Gui:
         self.root = Tk()
         self.root.title("Music genre recognizer")
 
-        button = Button(self.root, text="Select an audo file", fg="purple", command=self.recieve_user_sound_file,
+        button = Button(self.root, text="Select an audio file", fg="purple", command=self.recieve_user_sound_file,
                         width=22)
         button.grid(row=0, column=0)
         button2 = Button(self.root, text="Play and analyze", fg="green", command=self.play, width=22)
