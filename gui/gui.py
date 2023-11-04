@@ -3,28 +3,28 @@ from tkinter import *
 import winsound
 
 from deeplearning.infer import RnnInference
-from utils.mp3_wav_util import mp3_to_wav, get_wav_length
+from utils.mp3_wav_util import mp3_to_wav
 from utils.upload_sound_file import let_user_select_file
 
 
 class Gui:
     def __init__(self):
         self.root = Tk()
-        self.root.title("Muziek genre herkenner")
+        self.root.title("Music genre recognizer")
 
-        button = Button(self.root, text="Selecteer Audiobestand", fg="purple", command=self.recieve_user_sound_file,
+        button = Button(self.root, text="Select an audo file", fg="purple", command=self.recieve_user_sound_file,
                         width=22)
         button.grid(row=0, column=0)
-        button2 = Button(self.root, text="Afspelen en analyseren", fg="green", command=self.play, width=22)
+        button2 = Button(self.root, text="Play and analyze", fg="green", command=self.play, width=22)
         button2.grid(row=0, column=1)
         button3 = Button(self.root, text="Stop", fg="red", command=self.stop, width=22)
         button3.grid(row=0, column=2)
 
-        self.label = Label(self.root, text="Huidig geselecteerd audiobestand: Geen")
+        self.label = Label(self.root, text="Currently selected file: None")
         self.label.grid(row=2, column=1)
 
         self.text = Text(self.root)
-        self.text.insert('1.0', "Selecteer een audiobestand")
+        self.text.insert('1.0', "Select audio file")
         self.text.grid(row=3, column=1)
 
         self.root.grid()
@@ -48,8 +48,7 @@ class Gui:
 
         user_selected_file = let_user_select_file()
 
-        if user_selected_file.endswith("mp3") or user_selected_file.endswith("wav") \
-                and get_wav_length(user_selected_file) >= 30:
+        if user_selected_file.endswith("mp3") or user_selected_file.endswith("wav"):
 
             self.current_sound_file = user_selected_file
 
@@ -59,7 +58,7 @@ class Gui:
             self.update_selected_file_label()
 
         else:
-            self.popupmsg("Selecteer een mp3 of een wav bestand van tenminste 30 seconden.")
+            self.popupmsg("Please select an MP3 or a WAV file")
 
     def play(self):
         if not self.playing:
@@ -84,16 +83,12 @@ class Gui:
         if clear_prediction_field:
             self.clear_prediction_field()
 
-    def predict_and_show(self, mode="rnn"):
+    def predict_and_show(self):
         self.pred = self.inference.infer(self.current_sound_file)
-        if mode == "simple":
-            self.draw_prediction(self.pred)
-
-        elif mode == "rnn":
-            self.continuously_update_predict_window()
+        self.continuously_update_predict_window()
 
     def continuously_update_predict_window(self):
-        # schrijf om de 3 seconden een nieuw deel van de prediction
+        # We predicted a result for each 3 second bit of the song, show the results while the song is playing
         if self.current_rnn_prediction < len(self.pred):
             self.draw_prediction(self.pred[self.current_rnn_prediction])
             self.current_rnn_prediction += 1
@@ -112,11 +107,11 @@ class Gui:
 
     def clear_prediction_field(self):
         self.text.delete('1.0', '10.0')
-        self.text.insert('1.0', "Selecteer een audiobestand")
+        self.text.insert('1.0', "Please select an audio file")
 
     def update_selected_file_label(self):
         split = self.current_sound_file.split("/")
-        new_text = "Huidig geselecteerd audiobestand: {}".format(split[len(split) - 1])
+        new_text = "Currently selected audio file: {}".format(split[len(split) - 1])
         self.label.config(text=new_text)
 
     def remove_garbage_from_string(self, string):
