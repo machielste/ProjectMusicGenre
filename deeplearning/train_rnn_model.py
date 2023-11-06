@@ -14,7 +14,7 @@ logger = logging.getLogger("logger")
 logging.basicConfig(level=logging.DEBUG)
 
 
-def generate_taining_data():
+def generate_training_data():
     genres = 'blues classical country disco hiphop jazz metal pop reggae rock'.split()
     dataset = [[], []]
 
@@ -57,7 +57,7 @@ def generate_taining_data():
 
 def main(return_sequences=True):
     if not os.path.exists("processed_datasets/rnn_dataset.data"):
-        generate_taining_data()
+        generate_training_data()
 
     with open('processed_datasets/rnn_dataset.data', 'rb') as filehandle:
         dataset = pickle.load(filehandle)
