@@ -4,7 +4,8 @@ Environment requirements:
 
 - Cuda 11.2
 - Cudnn 8.1 or higher
-- ffmpeg installation
+- Ffmpeg installation
+- Vlc installation
 - Installation of requirements.txt
 
 Alternatively you can replace the tensorflow-gpu package with regular tensorflow.
