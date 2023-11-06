@@ -4,7 +4,7 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 
 from utils.feature_extraction import extract_features_for_audio_clip
-from utils.mp3_wav_util import get_wav_length
+from utils.mp3_wav_util import get_song_runtime
 
 
 class RnnInference:
@@ -17,7 +17,7 @@ class RnnInference:
     def infer(self, path_to_file):
         data_list = []
 
-        length = get_wav_length(path_to_file)
+        length = get_song_runtime(path_to_file)
 
         for i in range(int(length / 3)):
             y, sr = librosa.load(path_to_file, mono=True, duration=3, offset=i * 3)

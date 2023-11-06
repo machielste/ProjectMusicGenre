@@ -1,9 +1,8 @@
 from tkinter import *
 
-import winsound
+import vlc
 
 from deeplearning.infer import RnnInference
-from utils.mp3_wav_util import mp3_to_wav
 from utils.upload_sound_file import let_user_select_file
 
 
@@ -31,11 +30,11 @@ class Gui:
         self.root.protocol("WM_DELETE_WINDOW", self._delete_window)
 
         # init for vars
+        self.media_player = None
         self.current_sound_file = None
-        self.playing = True
         self.current_after_job = None
-        self.pred = None
-        self.current_rnn_prediction = 0
+        self.prediction = None
+        self.prediction_index = 0
 
         # init for inference class
         self.inference = RnnInference()
@@ -49,34 +48,27 @@ class Gui:
         user_selected_file = let_user_select_file()
 
         if user_selected_file.endswith("mp3") or user_selected_file.endswith("wav"):
-
             self.current_sound_file = user_selected_file
-
-            if self.current_sound_file.endswith("mp3"):
-                self.current_sound_file = mp3_to_wav(self.current_sound_file)
-
             self.update_selected_file_label()
 
         else:
             self.popupmsg("Please select an MP3 or a WAV file")
 
     def play(self):
-        if not self.playing:
-            self.playing = True
-            if self.current_sound_file is not None:
-                self.predict_and_show()
-                winsound.PlaySound(self.current_sound_file, winsound.SND_ASYNC)
+        if not self.media_player and self.current_sound_file is not None:
+            self.predict_and_show()
+            self.media_player = vlc.MediaPlayer(self.current_sound_file)
+            self.media_player.play()
 
     def stop(self, clear_prediction_field=True):
-        winsound.PlaySound(None, winsound.SND_PURGE)
-
-        self.playing = False
+        if self.media_player:
+            self.media_player.stop()
+            self.media_player = None
         self.current_sound_file = None
-        self.current_rnn_prediction = 0
+        self.prediction_index = 0
 
         try:
             self.root.after_cancel(self.current_after_job)
-
         except ValueError:
             pass
 
@@ -84,14 +76,14 @@ class Gui:
             self.clear_prediction_field()
 
     def predict_and_show(self):
-        self.pred = self.inference.infer(self.current_sound_file)
+        self.prediction = self.inference.infer(self.current_sound_file)
         self.continuously_update_predict_window()
 
     def continuously_update_predict_window(self):
         # We predicted a result for each 3 second bit of the song, show the results while the song is playing
-        if self.current_rnn_prediction < len(self.pred):
-            self.draw_prediction(self.pred[self.current_rnn_prediction])
-            self.current_rnn_prediction += 1
+        if self.prediction_index < len(self.prediction):
+            self.draw_prediction(self.prediction[self.prediction_index])
+            self.prediction_index += 1
             if self.current_sound_file is not None:
                 self.current_after_job = self.root.after(3000, self.continuously_update_predict_window)
         else:
@@ -114,11 +106,8 @@ class Gui:
         new_text = "Currently selected audio file: {}".format(split[len(split) - 1])
         self.label.config(text=new_text)
 
-
-
     def _delete_window(self):
         self.root.destroy()
-        winsound.PlaySound(None, winsound.SND_PURGE)
 
     @staticmethod
     def get_selected_file():
