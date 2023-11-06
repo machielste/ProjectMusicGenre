@@ -10,6 +10,9 @@ Alternatively you can replace the tensorflow-gpu package with regular tensorflow
 
 Usage:
 
+- run "main.py"
+
+Alternatively you can do the following to generate the dataset and model by yourself:
+
 - provide the GTZAN dataset in a folder called "dataset" under the "deeplearning" folder
 - run "train_rnn_model.py"
-- run "main.py"
