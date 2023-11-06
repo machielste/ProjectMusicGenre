@@ -3,7 +3,7 @@ from tkinter import *
 import vlc
 
 from deeplearning.infer import RnnInference
-from utils.upload_sound_file import let_user_select_file
+from utils.tkinter_util import let_user_select_file
 
 
 class Gui:

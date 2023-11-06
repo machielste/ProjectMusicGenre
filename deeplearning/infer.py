@@ -4,7 +4,7 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 
 from utils.feature_extraction import extract_features_for_audio_clip
-from utils.mp3_wav_util import get_song_runtime
+from utils.mp3_util import get_song_runtime
 
 
 class RnnInference:
