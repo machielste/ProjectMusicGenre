@@ -15,5 +15,6 @@ Usage:
 
 Alternatively you can do the following to generate the dataset and model by yourself:
 
+- remove rnn_model.h5 and rnn_dataset.data
 - provide the GTZAN dataset in a folder called "dataset" under the "deeplearning" folder
 - run "train_rnn_model.py"
