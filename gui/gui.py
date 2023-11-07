@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 
 import vlc
 
@@ -8,35 +8,33 @@ from utils.tkinter_util import let_user_select_file
 
 class Gui:
     def __init__(self):
-        self.root = Tk()
+        self.root = tk.Tk()
         self.root.title("Music genre recognizer")
 
-        button = Button(self.root, text="Select an audio file", fg="purple", command=self.receive_user_sound_file,
-                        width=22)
+        button = tk.Button(self.root, text="Select an audio file", fg="purple", command=self.receive_user_sound_file,
+                           width=22)
         button.grid(row=0, column=0)
-        button2 = Button(self.root, text="Play and analyze", fg="green", command=self.play, width=22)
+        button2 = tk.Button(self.root, text="Play and analyze", fg="green", command=self.play, width=22)
         button2.grid(row=0, column=1)
-        button3 = Button(self.root, text="Stop", fg="red", command=self.stop, width=22)
+        button3 = tk.Button(self.root, text="Stop", fg="red", command=self.stop, width=22)
         button3.grid(row=0, column=2)
 
-        self.label = Label(self.root, text="Currently selected file: None")
+        self.label = tk.Label(self.root, text="Currently selected file: None")
         self.label.grid(row=2, column=1)
 
-        self.text = Text(self.root)
+        self.text = tk.Text(self.root)
         self.text.insert('1.0', "Select audio file")
         self.text.grid(row=3, column=1)
 
         self.root.grid()
         self.root.protocol("WM_DELETE_WINDOW", self._delete_window)
 
-        # init for vars
         self.media_player = None
         self.current_sound_file = None
         self.current_after_job = None
         self.prediction = None
         self.prediction_index = 0
 
-        # init for inference class
         self.inference = RnnInference()
 
     def run(self):
@@ -116,11 +114,11 @@ class Gui:
     @staticmethod
     def popupmsg(msg):
         NORM_FONT = ("Helvetica", 10)
-        popup = Tk()
+        popup = tk.Tk()
         popup.wm_title("!")
-        label = Label(popup, text=msg, font=NORM_FONT)
+        label = tk.Label(popup, text=msg, font=NORM_FONT)
         label.pack(side="top", fill="x", pady=10)
-        B1 = Button(popup, text="Ok", command=popup.destroy)
+        B1 = tk.Button(popup, text="Ok", command=popup.destroy)
         B1.pack()
         popup.mainloop()
 

@@ -1,7 +1,7 @@
 from mutagen.mp3 import MP3
 
 
-def get_song_runtime(fname):
-    audio = MP3(fname)
+def get_song_runtime(filename):
+    audio = MP3(filename)
     length = audio.info.length
     return int(length)
