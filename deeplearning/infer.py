@@ -15,21 +15,14 @@ class RnnInference:
         self.model.reset_states()
 
     def infer(self, path_to_file):
-        data_list = []
-
         length = get_song_runtime(path_to_file)
+        data_list = []
 
         for i in range(int(length / 3)):
             y, sr = librosa.load(path_to_file, mono=True, duration=3, offset=i * 3)
-            data_list.append(np.array(extract_features_for_audio_clip(y=y, sr=sr)))
+            data_list.append(extract_features_for_audio_clip(y=y, sr=sr))
 
-        # data_list = np.expand_dims(data_list, axis=0)
-        data_list = np.array(data_list)
-
-        prediction_list = []
-        for item in data_list:
-            prediction_list.append(self.model.predict(item))
-        prediction_list = np.squeeze(prediction_list)
+        prediction_list = np.squeeze([self.model.predict(item) for item in np.array(data_list)])
 
         genres = 'blues classical country disco hiphop jazz metal pop reggae rock'.split()
         encoder = LabelEncoder()
