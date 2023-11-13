@@ -20,17 +20,17 @@ class RnnInference:
     def infer(self, song_path) -> List:
         length = get_song_runtime(song_path)
 
-        data_list = []
+        extracted_features = []
         for i in range(int(length / 3)):
             y, sr = librosa.load(song_path, mono=True, duration=3, offset=i * 3)
-            data_list.append(extract_features_for_audio_clip(y=y, sr=sr))
+            extracted_features.append(extract_features_for_audio_clip(y=y, sr=sr))
 
-        prediction_list = np.squeeze([self.model.predict(item) for item in np.array(data_list)])
+        prediction_list = np.squeeze([self.model.predict(item) for item in np.array(extracted_features)])
 
         encoder = LabelEncoder()
         encoder.fit(GENRES)
 
-        final_result = []
+        top_predictions = []
         for prediction in prediction_list:
             current_result = []
             for i in range(3):
@@ -38,6 +38,6 @@ class RnnInference:
                 current_result.append([encoder.inverse_transform([res]), prediction[res]])
                 prediction[res] = 0
 
-            final_result.append(current_result)
+            top_predictions.append(current_result)
 
-        return final_result
+        return top_predictions
