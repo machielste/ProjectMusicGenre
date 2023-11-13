@@ -16,16 +16,11 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 def generate_training_data():
-    genres = GENRES.split()
     dataset = [[], []]
-
-    logger.info("Now generating training data")
-
     encoder = LabelEncoder()
-    encoder.fit(genres)
+    encoder.fit(GENRES)
 
-    for g in genres:
-
+    for g in GENRES:
         logger.info(f"Now handling folder: {g}")
 
         for filename in os.listdir(f'./dataset/{g}'):

@@ -1,3 +1,5 @@
+from typing import List
+
 import librosa
 import numpy as np
 import tensorflow as tf
@@ -15,7 +17,7 @@ class RnnInference:
         self.model.stateful = True
         self.model.reset_states()
 
-    def infer(self, song_path):
+    def infer(self, song_path) -> List:
         length = get_song_runtime(song_path)
 
         data_list = []
@@ -25,9 +27,8 @@ class RnnInference:
 
         prediction_list = np.squeeze([self.model.predict(item) for item in np.array(data_list)])
 
-        genres = GENRES.split()
         encoder = LabelEncoder()
-        encoder.fit(genres)
+        encoder.fit(GENRES)
 
         final_result = []
         for prediction in prediction_list:

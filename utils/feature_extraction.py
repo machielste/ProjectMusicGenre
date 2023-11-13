@@ -1,8 +1,10 @@
+from typing import List
+
 import librosa
 import numpy as np
 
 
-def extract_features_for_audio_clip(y, sr):
+def extract_features_for_audio_clip(y, sr) -> List:
     sub_data_list = []
     sub_data_list.append(np.mean(librosa.feature.chroma_stft(y=y, sr=sr)))
     sub_data_list.append(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)))

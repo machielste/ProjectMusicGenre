@@ -1,7 +1,8 @@
 import tensorflow as tf
+from keras import Model
 
 
-def get_rnn_model(return_sequences, stateful, classes=10):
+def get_rnn_model(return_sequences, stateful, classes=10) -> Model:
     model = tf.keras.Sequential([
         tf.keras.layers.Normalization(axis=2),
         tf.keras.layers.LSTM(1024, return_sequences=return_sequences,
