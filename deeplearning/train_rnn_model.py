@@ -1,4 +1,3 @@
-import logging
 import os
 import pickle
 
@@ -11,9 +10,6 @@ from model import get_rnn_model
 from utils.constants import GENRES
 from utils.feature_extraction import extract_features_for_audio_clip
 
-logger = logging.getLogger("logger")
-logging.basicConfig(level=logging.DEBUG)
-
 
 def generate_training_data():
     dataset = [[], []]
@@ -21,8 +17,6 @@ def generate_training_data():
     encoder.fit(GENRES)
 
     for g in GENRES:
-        logger.info(f"Now handling folder: {g}")
-
         for filename in os.listdir(f'./dataset/{g}'):
             song_filepath = f'./dataset/{g}/{filename}'
 
@@ -32,7 +26,7 @@ def generate_training_data():
             # Our audio clips are 30 seconds long,
             # generate sequences of 10 inputs and outputs for the RNN input.
             # This means our input is 10 3-second clips,
-            # and our output will be 10 predictions, or just one if "return_sequences" is disabled in the lstm.
+            # and our output will be 10 predictions.
             librosa_features = []
             for i in range(10):
                 y, sr = librosa.load(song_filepath, mono=True, duration=3, offset=i * 3)
