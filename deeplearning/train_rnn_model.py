@@ -54,6 +54,7 @@ def main():
     X, Y = dataset[0], dataset[1]
 
     model = get_rnn_model(return_sequences=True, stateful=False)
+    # use training data to initialize normalization layer of model
     model.layers[0].adapt(X)
 
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2)
