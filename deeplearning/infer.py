@@ -18,6 +18,10 @@ class RnnInference:
         self.model.reset_states()
 
     def infer(self, song_path) -> List:
+        """
+        :param song_path: path of song to run inference on
+        :return: list of predictions in ["genre", "confidence"] pairs
+        """
         length = get_song_runtime(song_path)
 
         extracted_features = []
