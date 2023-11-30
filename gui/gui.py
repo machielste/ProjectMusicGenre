@@ -1,4 +1,5 @@
 import tkinter as tk
+from typing import List
 
 import vlc
 
@@ -50,7 +51,7 @@ class Gui:
             self.update_selected_file_label()
 
         else:
-            self.popupmsg("Please select an MP3 or a WAV file")
+            self.popup_message("Please select an MP3 or a WAV file")
 
     def play(self):
         if not self.media_player and self.current_sound_file is not None:
@@ -87,11 +88,11 @@ class Gui:
         else:
             self.stop(clear_prediction_field=False)
 
-    def draw_prediction(self, pred):
+    def draw_prediction(self, full_prediction: List):
         self.text.delete('1.0', '10.0')
 
-        for x in pred:
-            to_insert = (str(x[0]) + " " + str(x[1]))
+        for single_prediction in full_prediction:
+            to_insert = (str(single_prediction[0]) + " " + str(single_prediction[1]))
             to_insert = self.remove_garbage_from_string(to_insert)
             self.text.insert('end', to_insert + '\n')
 
@@ -112,17 +113,17 @@ class Gui:
         return let_user_select_file()
 
     @staticmethod
-    def popupmsg(msg):
+    def popup_message(message_to_display: str):
         NORM_FONT = ("Helvetica", 10)
         popup = tk.Tk()
         popup.wm_title("!")
-        label = tk.Label(popup, text=msg, font=NORM_FONT)
+        label = tk.Label(popup, text=message_to_display, font=NORM_FONT)
         label.pack(side="top", fill="x", pady=10)
         B1 = tk.Button(popup, text="Ok", command=popup.destroy)
         B1.pack()
         popup.mainloop()
 
     @staticmethod
-    def remove_garbage_from_string(string):
+    def remove_garbage_from_string(string: str):
         string = string.translate({ord(c): None for c in r"[]\/"})
         return string
