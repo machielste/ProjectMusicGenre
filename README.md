@@ -1,6 +1,6 @@
-Simple python GUI application which analyzes music, and predicts the genre while the song plays.
+# Simple python GUI application which analyzes music, and predicts the genre while the song plays.
 
-Environment requirements:
+## Environment requirements:
 
 - Cuda 11.2
 - Cudnn 8.1 or higher
@@ -10,9 +10,13 @@ Environment requirements:
 
 Alternatively you can replace the tensorflow-gpu package with regular tensorflow.
 
-Usage:
+## Usage:
 
-- run "main.py"
+Run the following command while in a valid python environment
+
+```
+python main.py
+```
 
 Alternatively you can do the following to generate the dataset and model by yourself:
 
