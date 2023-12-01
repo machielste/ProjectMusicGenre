@@ -1,23 +1,28 @@
-# Simple python GUI application which analyzes music, and predicts the genre while the song plays.
+# Simple python GUI application which analyzes music and predicts the genre while the song plays.
 
 ## Environment requirements:
 
-- Installation of requirements.txt
+Depending on the user's system, only requirements.txt needs to be installed, as it contains the packages mentioned below
+it.
+The below-mentioned packages can be installed on the system manually if they cannot be installed in the environment
+itself.
+The user can replace the tensorflow-gpu package with regular tensorflow if no GPU is available.
+
+- Python 3.10.0 environment
+- Installation of requirements.txt into environment
 - Cuda 11.2
 - Cudnn 8.1 or higher
 - Ffmpeg installation
 - VLC Media Player installation
 
-Depending on the user's system, only requirements.txt needs to be installed, as it contains the packaged mentioned below
-it.
-The user can replace the tensorflow-gpu package with regular tensorflow if no GPU is available.
+It is suggested the user uses CONDA or ANACONDA to create a virtual environment.
 
 ## Usage:
 
 This project provides code to train a model on the GTZAN dataset, and a GUI which uses the model to analyze songs.
 A pre-trained model file is provided in this repo, thus the user does not need to train the model by themselves.
 
-Run the following command while in a valid python environment:
+Run the following command while in a valid python 3.10.0 environment:
 
 ```
 python main.py
