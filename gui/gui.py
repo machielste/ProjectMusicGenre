@@ -71,6 +71,8 @@ class Gui:
         except ValueError:
             pass
 
+        self.update_selected_file_label()
+
         if clear_prediction_field:
             self.clear_prediction_field()
 
@@ -89,21 +91,28 @@ class Gui:
             self.stop(clear_prediction_field=False)
 
     def draw_prediction(self, full_prediction: List):
-        self.text.delete('1.0', '10.0')
+        self.clear_text_window()
 
         for single_prediction in full_prediction:
-            to_insert = (str(single_prediction[0]) + " " + str(single_prediction[1]))
+            single_prediction[1] = round(single_prediction[1] * 100)
+            to_insert = f'{single_prediction[0]} {single_prediction[1]}%'
             to_insert = self.remove_garbage_from_string(to_insert)
             self.text.insert('end', to_insert + '\n')
 
     def clear_prediction_field(self):
-        self.text.delete('1.0', '10.0')
+        self.clear_text_window()
         self.text.insert('1.0', "Please select an audio file")
 
     def update_selected_file_label(self):
-        split = self.current_sound_file.split("/")
-        new_text = "Currently selected audio file: {}".format(split[len(split) - 1])
-        self.label.config(text=new_text)
+        if self.current_sound_file:
+            split = self.current_sound_file.split("/")
+            new_text = f"Currently selected audio file: {split[len(split) - 1]}"
+            self.label.config(text=new_text)
+        else:
+            self.label.config(text="Currently selected file: None")
+
+    def clear_text_window(self):
+        self.text.delete('1.0', '10.0')
 
     def _delete_window(self):
         self.root.destroy()
