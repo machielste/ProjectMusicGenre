@@ -2,17 +2,22 @@
 
 ## Environment requirements:
 
+- Installation of requirements.txt
 - Cuda 11.2
 - Cudnn 8.1 or higher
 - Ffmpeg installation
-- Vlc installation
-- Installation of requirements.txt
+- VLC Media Player installation
 
-Alternatively you can replace the tensorflow-gpu package with regular tensorflow.
+Depending on the user's system, only requirements.txt needs to be installed, as it contains the packaged mentioned below
+it.
+The user can replace the tensorflow-gpu package with regular tensorflow if no GPU is available.
 
 ## Usage:
 
-Run the following command while in a valid python environment
+This project provides code to train a model on the GTZAN dataset, and a GUI which uses the model to analyze songs.
+A pre-trained model file is provided in this repo, thus the user does not need to train the model by themselves.
+
+Run the following command while in a valid python environment:
 
 ```
 python main.py
@@ -20,6 +25,8 @@ python main.py
 
 Alternatively you can do the following to generate the dataset and model by yourself:
 
-- remove rnn_model.h5 and rnn_dataset.data
-- provide the GTZAN dataset in a folder called "dataset" under the "deeplearning" folder
-- run "train_rnn_model.py"
+- Remove rnn_model.h5 and rnn_dataset.data.
+- Provide the GTZAN dataset in a folder called "dataset" under the "deeplearning" folder.
+- Run "train_rnn_model.py"
+
+This wil first generate the dataset, and then proceed to train the model, after which the dataset and model are saved.
