@@ -25,7 +25,7 @@ A pre-trained model file is provided in this repo, thus the user does not need t
 Run the following command while in a valid python 3.10.0 environment:
 
 ```
-python main.py
+python3 main.py
 ```
 
 Alternatively you can do the following to generate the dataset and model by yourself:
